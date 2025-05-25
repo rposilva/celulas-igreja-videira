@@ -13,9 +13,14 @@ app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
 
 
 
-# Habilitando o banco de dados
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///celulas.db'
+# Configuração do banco de dados
+database_url = os.getenv('DATABASE_URL', 'sqlite:///celulas.db')
+if database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
 # Inicialize o SQLAlchemy com o app
 db.init_app(app)
